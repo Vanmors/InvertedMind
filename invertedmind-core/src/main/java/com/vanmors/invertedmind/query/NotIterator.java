@@ -1,11 +1,5 @@
 package com.vanmors.invertedmind.query;
 
-/**
- * NOT iterator: filters out documents from the positive iterator
- * that also appear in the negative iterator.
- * <p>
- * Only valid when combined with an AND (the positive side provides the "universe").
- */
 public final class NotIterator implements PostingListIterator {
 
     private final PostingListIterator positive;

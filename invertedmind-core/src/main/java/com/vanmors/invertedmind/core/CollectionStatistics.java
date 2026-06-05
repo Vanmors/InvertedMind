@@ -1,8 +1,5 @@
 package com.vanmors.invertedmind.core;
 
-/**
- * Collection-wide statistics needed for BM25 scoring.
- */
 public record CollectionStatistics(int totalDocuments, long totalTokens, double averageDocumentLength) {
 
     public CollectionStatistics {

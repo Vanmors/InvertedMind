@@ -11,24 +11,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-/**
- * Compression efficiency analysis on real MS MARCO data.
- * <p>
- * For each posting list component (docIds, frequencies, positions) computes:
- * <ul>
- *   <li>Raw size — as plain int32 arrays (no compression baseline)</li>
- *   <li>Compressed size — actual encoded bytes in the built index</li>
- *   <li>Compression ratio = raw / compressed</li>
- * </ul>
- * Also breaks down docId compression by posting list length (df) bucket,
- * because PForDelta efficiency grows with list length.
- * <p>
- * Run:
- * <pre>
- *   java -cp benchmarks.jar com.vanmors.invertedmind.bench.CompressionBenchmark
- *   java -cp benchmarks.jar com.vanmors.invertedmind.bench.CompressionBenchmark data/msmarco 50000
- * </pre>
- */
 public final class CompressionBenchmark {
 
     // df bucket boundaries: [0,10) [10,100) [100,1000) [1000,∞)
@@ -137,10 +119,7 @@ public final class CompressionBenchmark {
 
     // ── Helpers ───────────────────────────────────────────────────────────────
 
-    /**
-     * Estimates skip list metadata bytes as written by SegmentWriter
-     * (5 VarInts per skip entry + 1 VarInt for skip count).
-     */
+    
     private static long estimateSkipBytes(PostingList pl) {
         int skipCount = pl.skipDocIds().length;
         long bytes = varIntSize(skipCount);
@@ -154,7 +133,7 @@ public final class CompressionBenchmark {
         return bytes;
     }
 
-    /** VarInt byte length for a non-negative int. */
+    
     private static int varIntSize(int v) {
         if (v < 0x80)       return 1;
         if (v < 0x4000)     return 2;
@@ -175,7 +154,7 @@ public final class CompressionBenchmark {
                 name, mb(raw), mb(comp), ratio(raw, comp), method);
     }
 
-    /** printf with Locale.ROOT to avoid locale-dependent decimal separators. */
+    
     private static void p(String fmt, Object... args) {
         System.out.printf(Locale.ROOT, fmt + "%n", args);
     }

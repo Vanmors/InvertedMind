@@ -3,13 +3,6 @@ package com.vanmors.invertedmind.query;
 import java.util.Arrays;
 import java.util.Comparator;
 
-/**
- * Adjacent iterator: terms must appear at consecutive positions in the document.
- * <p>
- * First aligns all children to the same docId (like AND), then checks that
- * for each consecutive pair of children, there exist positions p_i and p_{i+1}
- * such that p_{i+1} = p_i + 1.
- */
 public final class AdjIterator implements PostingListIterator {
 
     private final PostingListIterator[] iterators;

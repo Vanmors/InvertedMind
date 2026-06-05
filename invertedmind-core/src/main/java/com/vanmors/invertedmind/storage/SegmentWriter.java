@@ -13,14 +13,6 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.Map;
 
-/**
- * Writes an inverted index segment to disk.
- * <p>
- * File layout:
- * <pre>
- * [Header 96B] [TermDictionary] [PostingLists] [DocNorms]
- * </pre>
- */
 public final class SegmentWriter {
 
     private final Path outputPath;
@@ -31,13 +23,7 @@ public final class SegmentWriter {
         this.codec = codec;
     }
 
-    /**
-     * Writes a segment file.
-     *
-     * @param postingLists sorted map of term -> PostingList
-     * @param docLengths   per-document token counts
-     * @param stats        collection statistics
-     */
+    
     public void write(Map<String, PostingList> postingLists, int[] docLengths,
                       CollectionStatistics stats) throws IOException {
         try (FileChannel channel = FileChannel.open(outputPath,
@@ -71,13 +57,6 @@ public final class SegmentWriter {
     private long writeTermDictionary(FileChannel channel, Map<String, PostingList> postingLists)
             throws IOException {
         long startPos = channel.position();
-
-        // For each term: [VInt: termLength] [bytes: term UTF-8] [VInt: df] [VLong: ttf]
-        // Posting list offsets are written relative to the postings block start
-        // We don't know them yet, so we record them as sequential indices.
-        // The actual offsets will be patched after writing posting lists.
-        // For simplicity, store offset/length info as part of dictionary:
-        // [VInt: termLen] [UTF-8 term] [VInt: df] [VLong: ttf]
 
         ByteBuffer buf = ByteBuffer.allocate(8192);
 

@@ -7,10 +7,6 @@ import java.util.Random;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * Roundtrip tests for PForDeltaCodec: encode -> decode should produce identical arrays.
- * Tests with both synthetic and realistic posting list data.
- */
 class CodecRoundtripTest {
 
     private final PForDeltaCodec codec = new PForDeltaCodec();

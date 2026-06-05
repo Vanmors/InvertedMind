@@ -6,12 +6,6 @@ import com.vanmors.invertedmind.core.*;
 
 import java.util.*;
 
-/**
- * Builds an inverted index from documents.
- * <p>
- * Accumulates postings in memory. Call {@link #build()} to produce
- * a map of term -> PostingList suitable for writing to a segment or querying in-memory.
- */
 public final class IndexBuilder {
 
     private final IndexConfig config;
@@ -32,9 +26,7 @@ public final class IndexBuilder {
         this.codec = new PForDeltaCodec();
     }
 
-    /**
-     * Adds a document and returns the assigned docId.
-     */
+    
     public int addDocument(String text) {
         List<Token> tokens = analyzer.analyze(text);
         int docId = nextDocId++;
@@ -56,23 +48,17 @@ public final class IndexBuilder {
         return docId;
     }
 
-    /**
-     * Returns the number of documents added so far.
-     */
+    
     public int documentCount() {
         return nextDocId;
     }
 
-    /**
-     * Returns the document lengths (token count per doc).
-     */
+    
     public int[] getDocLengths() {
         return docLengths.stream().mapToInt(Integer::intValue).toArray();
     }
 
-    /**
-     * Builds PostingLists for all terms.
-     */
+    
     public Map<String, PostingList> buildPostingLists() {
         Map<String, PostingList> result = new TreeMap<>();
         for (var entry : invertedLists.entrySet()) {
@@ -81,17 +67,13 @@ public final class IndexBuilder {
         return result;
     }
 
-    /**
-     * Builds collection statistics.
-     */
+    
     public CollectionStatistics buildStatistics() {
         long totalTokens = docLengths.stream().mapToLong(Integer::longValue).sum();
         return CollectionStatistics.compute(nextDocId, totalTokens);
     }
 
-    /**
-     * Writes the index to a segment file on disk.
-     */
+    
     public void writeSegment(java.nio.file.Path segmentFile) throws java.io.IOException {
         Map<String, PostingList> postingLists = buildPostingLists();
         CollectionStatistics stats = buildStatistics();

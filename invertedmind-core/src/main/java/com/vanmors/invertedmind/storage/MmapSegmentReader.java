@@ -14,12 +14,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 
-/**
- * Reads a segment file using memory-mapped I/O.
- * <p>
- * Each section of the file (header, dictionary, postings, norms)
- * is mapped independently via {@link FileChannel#map(FileChannel.MapMode, long, long)}.
- */
 public final class MmapSegmentReader implements Closeable {
 
     private final FileChannel channel;
@@ -46,10 +40,7 @@ public final class MmapSegmentReader implements Closeable {
     public SegmentHeader header() { return header; }
     public PForDeltaCodec codec() { return codec; }
 
-    /**
-     * Loads the term dictionary from the mmap'd dictionary buffer.
-     * Also records the posting list data ranges from the postings buffer.
-     */
+    
     public TermDictionary loadTermDictionary() {
         ByteBuffer dict = dictBuffer.duplicate();
         TermDictionary.Builder builder = TermDictionary.builder(header.termCount());
@@ -96,9 +87,7 @@ public final class MmapSegmentReader implements Closeable {
         return builder.build();
     }
 
-    /**
-     * Reads a posting list with known df and ttf (from TermInfo).
-     */
+    
     public PostingList readPostingList(TermInfo termInfo) {
         ByteBuffer buf = postingsBuffer.duplicate();
         buf.position((int) termInfo.postingListOffset());
@@ -133,9 +122,7 @@ public final class MmapSegmentReader implements Closeable {
                 docIdBuf, freqBuf, posBuf, codec);
     }
 
-    /**
-     * Loads document lengths (norms) from the mmap'd norms buffer.
-     */
+    
     public int[] loadDocLengths() {
         ByteBuffer norms = normsBuffer.duplicate();
         int[] lengths = new int[header.documentCount()];

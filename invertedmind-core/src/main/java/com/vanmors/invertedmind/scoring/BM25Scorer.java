@@ -2,14 +2,6 @@ package com.vanmors.invertedmind.scoring;
 
 import com.vanmors.invertedmind.core.CollectionStatistics;
 
-/**
- * Okapi BM25 scoring function.
- * <p>
- * BM25(D, Q) = sum over terms t in Q of:
- *   IDF(t) * (tf(t,D) * (k1 + 1)) / (tf(t,D) + k1 * (1 - b + b * |D| / avgdl))
- * <p>
- * where IDF(t) = ln(1 + (N - df(t) + 0.5) / (df(t) + 0.5))
- */
 public final class BM25Scorer {
 
     private final float k1;

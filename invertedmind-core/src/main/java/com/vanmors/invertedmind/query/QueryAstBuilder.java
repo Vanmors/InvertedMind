@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * ANTLR visitor that transforms the parse tree into a Query AST.
- */
 final class QueryAstBuilder extends InvertedMindQueryBaseVisitor<Query> {
 
     @Override
@@ -114,9 +111,7 @@ final class QueryAstBuilder extends InvertedMindQueryBaseVisitor<Query> {
         return visit(ctx.orExpr());
     }
 
-    /**
-     * Validates that NOT is only used inside AND.
-     */
+    
     private void validate(Query query) {
         if (query instanceof NotQuery) {
             throw new QueryParseException("NOT cannot be used at the top level");

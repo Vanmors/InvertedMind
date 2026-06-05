@@ -2,12 +2,6 @@ package com.vanmors.invertedmind.storage;
 
 import java.nio.ByteBuffer;
 
-/**
- * Binary segment file header (44 bytes).
- * <p>
- * Sections are stored contiguously: [Header][Dict][Postings][Norms].
- * Offsets are derived from sizes at read time.
- */
 public record SegmentHeader(
         int formatVersion,
         int termCount,

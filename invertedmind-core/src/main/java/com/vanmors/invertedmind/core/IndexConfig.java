@@ -2,9 +2,6 @@ package com.vanmors.invertedmind.core;
 
 import java.nio.file.Path;
 
-/**
- * Configuration for index building and reading.
- */
 public record IndexConfig(
         Path indexDirectory,
         int skipInterval

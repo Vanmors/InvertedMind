@@ -12,63 +12,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-/**
- * Interactive CLI demo for InvertedMind.
- *
- * <p>Usage:
- * <pre>
- *   # Sample corpus (built-in, instant)
- *   mvn exec:java -pl invertedmind-demo -Dexec.mainClass=com.vanmors.invertedmind.demo.DemoApp
- *
- *   # MS MARCO dataset
- *   mvn exec:java -pl invertedmind-demo -Dexec.mainClass=com.vanmors.invertedmind.demo.DemoApp \
- *       -Dexec.args="data/msmarco 100000"
- * </pre>
- *
- * <p>Query syntax:
- * <pre>
- *   dog                         single term
- *   dog AND cat                 AND
- *   dog OR cat                  OR
- *   dog AND NOT cat             AND NOT
- *   "new york"                  phrase (adjacent)
- *   dog NEAR/5 cat              proximity within 5 positions
- *   (dog OR cat) AND training   grouped expression
- * </pre>
- */
 public final class DemoApp {
 
-    private static final String[] SAMPLE_CORPUS = {
-            "The quick brown fox jumps over the lazy dog in the sunny meadow",
-            "A quick brown dog runs fast through the park chasing squirrels",
-            "The fox and the dog are unlikely friends who share their meals",
-            "Lazy fox sleeps all day long under the old oak tree",
-            "Brown cat sits on the warm mat by the fireplace",
-            "The dog barks loudly at the mailman every morning",
-            "Quick reflexes help the fox catch its prey in the wild",
-            "The brown bear searches for honey in the forest",
-            "A lazy afternoon spent reading books by the river",
-            "The meadow is full of colorful flowers in the spring",
-            "Dogs and cats are popular pets around the world",
-            "The fox ran quickly across the frozen lake at dawn",
-            "Brown bread is healthier than white bread for breakfast",
-            "The quick hare lost the race to the slow tortoise",
-            "A dog named Rex guards the house faithfully every night",
-    };
-
     public static void main(String[] args) throws IOException {
-        Path dataDir = args.length > 0 ? Path.of(args[0]) : null;
-        int numDocs  = args.length > 1 ? Integer.parseInt(args[1]) : 50_000;
+        String msmarcoDir = System.getProperty("msmarco.dir", "data/msmarco");
+        Path dataDir = Path.of(msmarcoDir);
+        int numDocs  = Integer.parseInt(System.getProperty("msmarco.limit", "50000"));
 
         System.out.println("=== InvertedMind Demo ===");
         System.out.println();
 
-        List<String> corpus;
-        if (dataDir != null) {
-            corpus = loadPassages(dataDir, numDocs);
-        } else {
-            corpus = List.of(SAMPLE_CORPUS);
-        }
+        List<String> corpus = loadPassages(dataDir, numDocs);
 
         // Build index
         Path tempDir = Files.createTempDirectory("invertedmind-demo");
@@ -154,7 +108,7 @@ public final class DemoApp {
         return passages;
     }
 
-    /** Two silent passes over common terms to trigger JIT compilation. */
+    
     private static void warmup(InvertedIndex index, List<String> corpus) {
         String[] probes = {"the", "and", "of", "in", "to", "the AND of", "in OR to"};
         for (int i = 0; i < 2; i++) {

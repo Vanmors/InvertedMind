@@ -8,10 +8,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * Unicode-aware tokenizer that splits on non-alphanumeric characters,
- * lowercases, and strips combining diacritical marks (accents).
- */
 public final class StandardTokenizer implements Tokenizer {
 
     private static final Pattern TOKEN_PATTERN = Pattern.compile("[\\p{L}\\p{N}]+");

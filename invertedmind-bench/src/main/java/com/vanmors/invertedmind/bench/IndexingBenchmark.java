@@ -10,11 +10,6 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-/**
- * Measures batch indexing throughput using real MS MARCO passages.
- * Each benchmark iteration builds a fresh index from scratch to measure
- * end-to-end throughput: tokenization + TreeMap insertions + PForDelta compression.
- */
 @BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(TimeUnit.SECONDS)
 @State(Scope.Benchmark)

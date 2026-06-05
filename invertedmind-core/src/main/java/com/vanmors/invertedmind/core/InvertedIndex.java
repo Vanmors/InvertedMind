@@ -5,11 +5,6 @@ import com.vanmors.invertedmind.scoring.BM25Scorer;
 
 import java.util.*;
 
-/**
- * Top-level facade for the inverted index.
- * <p>
- * Supports both in-memory indices (from IndexBuilder) and file-based segments.
- */
 public final class InvertedIndex {
 
     private final Map<String, PostingList> postingLists;
@@ -25,9 +20,7 @@ public final class InvertedIndex {
         this.docLengths = docLengths;
     }
 
-    /**
-     * Returns the PostingList for the given term, or null if not found.
-     */
+    
     public PostingList getPostingList(String term) {
         return postingLists.get(term);
     }
@@ -36,17 +29,13 @@ public final class InvertedIndex {
         return stats;
     }
 
-    /**
-     * Searches using a query string, returns top-K scored results.
-     */
+    
     public QueryResult search(String queryString, int topK) {
         Query query = QueryParser.parse(queryString);
         return search(query, topK);
     }
 
-    /**
-     * Searches using a Query AST, returns top-K scored results.
-     */
+    
     public QueryResult search(Query query, int topK) {
         QueryPlanner planner = new QueryPlanner(this::getPostingList);
         PostingListIterator iterator = planner.plan(query);

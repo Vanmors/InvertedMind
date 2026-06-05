@@ -2,11 +2,6 @@ package com.vanmors.invertedmind.query;
 
 import java.util.*;
 
-/**
- * OR iterator: returns documents that match ANY child.
- * <p>
- * Uses a priority queue (min-heap on docId) for efficient merging.
- */
 public final class OrIterator implements PostingListIterator {
 
     private final PostingListIterator[] allIterators;

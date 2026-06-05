@@ -2,21 +2,11 @@ package com.vanmors.invertedmind.util;
 
 import java.nio.ByteBuffer;
 
-/**
- * Variable-byte integer encoding/decoding.
- * <p>
- * Each byte uses 7 bits for data and the high bit as a continuation flag:
- * high bit = 1 means more bytes follow, high bit = 0 means this is the last byte.
- * Values are encoded in little-endian order (least significant group first).
- */
 public final class VarIntUtil {
 
     private VarIntUtil() {}
 
-    /**
-     * Encodes a non-negative int into the buffer using variable-byte encoding.
-     * @return number of bytes written (1-5)
-     */
+    
     public static int writeVInt(ByteBuffer buf, int value) {
         if (value < 0) throw new IllegalArgumentException("value must be >= 0: " + value);
         int bytesWritten = 0;
@@ -29,9 +19,7 @@ public final class VarIntUtil {
         return bytesWritten + 1;
     }
 
-    /**
-     * Decodes a variable-byte encoded int from the buffer.
-     */
+    
     public static int readVInt(ByteBuffer buf) {
         int result = 0;
         int shift = 0;
@@ -45,10 +33,7 @@ public final class VarIntUtil {
         return result;
     }
 
-    /**
-     * Encodes a non-negative long into the buffer using variable-byte encoding.
-     * @return number of bytes written (1-9)
-     */
+    
     public static int writeVLong(ByteBuffer buf, long value) {
         if (value < 0) throw new IllegalArgumentException("value must be >= 0: " + value);
         int bytesWritten = 0;
@@ -61,9 +46,7 @@ public final class VarIntUtil {
         return bytesWritten + 1;
     }
 
-    /**
-     * Decodes a variable-byte encoded long from the buffer.
-     */
+    
     public static long readVLong(ByteBuffer buf) {
         long result = 0;
         int shift = 0;
@@ -77,9 +60,7 @@ public final class VarIntUtil {
         return result;
     }
 
-    /**
-     * Returns the number of bytes needed to encode the given value.
-     */
+    
     public static int vIntSize(int value) {
         if (value < 0) throw new IllegalArgumentException("value must be >= 0");
         int size = 1;
@@ -90,10 +71,7 @@ public final class VarIntUtil {
         return size;
     }
 
-    /**
-     * Encodes an array of non-negative ints using variable-byte encoding.
-     * @return total bytes written
-     */
+    
     public static int  writeVInts(ByteBuffer buf, int[] values, int offset, int length) {
         int totalBytes = 0;
         for (int i = offset; i < offset + length; i++) {
@@ -102,10 +80,7 @@ public final class VarIntUtil {
         return totalBytes;
     }
 
-    /**
-     * Decodes multiple variable-byte encoded ints from the buffer.
-     * @return number of values decoded
-     */
+    
     public static int readVInts(ByteBuffer buf, int[] out, int offset, int count) {
         for (int i = 0; i < count; i++) {
             out[offset + i] = readVInt(buf);

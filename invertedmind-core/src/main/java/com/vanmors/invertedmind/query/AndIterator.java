@@ -3,12 +3,6 @@ package com.vanmors.invertedmind.query;
 import java.util.Arrays;
 import java.util.Comparator;
 
-/**
- * AND iterator: returns documents that match ALL children.
- * <p>
- * Children are sorted by cost (ascending) so the cheapest iterator leads.
- * Uses advance() on followers to efficiently skip to the lead's current docId.
- */
 public final class AndIterator implements PostingListIterator {
 
     private final PostingListIterator[] iterators;

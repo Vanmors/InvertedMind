@@ -6,28 +6,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-/**
- * Transforms a Query AST into a PostingListIterator tree.
- * <p>
- * Optimizations:
- * - AND children sorted by ascending cost
- * - NOT children separated and wrapped in NotIterator
- */
 public final class QueryPlanner {
 
     private final Function<String, PostingList> postingListProvider;
 
-    /**
-     * @param postingListProvider function that returns a PostingList for a term, or null if not found
-     */
+    
     public QueryPlanner(Function<String, PostingList> postingListProvider) {
         this.postingListProvider = postingListProvider;
     }
 
-    /**
-     * Plans and returns the iterator tree for the given query.
-     * Returns null if a required term is not in the index.
-     */
+    
     public PostingListIterator plan(Query query) {
         if (query instanceof TermQuery tq) {
             return planTerm(tq);

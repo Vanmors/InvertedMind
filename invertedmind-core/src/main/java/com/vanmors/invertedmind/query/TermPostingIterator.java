@@ -7,13 +7,6 @@ import com.vanmors.invertedmind.util.VarIntUtil;
 
 import java.nio.ByteBuffer;
 
-/**
- * Leaf iterator that reads from a compressed {@link PostingList}.
- * <p>
- * Decodes docId gaps in blocks via the posting list's codec (PForDelta),
- * frequencies and positions on-the-fly from VarInt-encoded byte buffers.
- * Uses the skip list for efficient {@link #advance(int)} operations.
- */
 public final class TermPostingIterator implements PostingListIterator {
 
     private final PostingList postingList;
@@ -182,9 +175,7 @@ public final class TermPostingIterator implements PostingListIterator {
         return totalDocs;
     }
 
-    /**
-     * Skips past positions data for the current doc if not yet read.
-     */
+    
     private void skipCurrentPositions() {
         if (docsDecoded > 0 && positionsRead == 0) {
             int count = VarIntUtil.readVInt(posBuf);

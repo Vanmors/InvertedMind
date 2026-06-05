@@ -11,9 +11,6 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * End-to-end tests: index documents -> parse query -> evaluate -> check results.
- */
 class EndToEndQueryTest {
 
     private static InvertedIndex index;

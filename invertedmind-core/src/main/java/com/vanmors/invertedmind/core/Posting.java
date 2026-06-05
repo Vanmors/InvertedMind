@@ -2,10 +2,6 @@ package com.vanmors.invertedmind.core;
 
 import java.util.Arrays;
 
-/**
- * A single posting entry: a term occurrence in a document.
- * Used during index construction; at query time we work with compressed byte streams.
- */
 public record Posting(int docId, int termFrequency, int[] positions) {
 
     public Posting {

@@ -6,12 +6,6 @@ import com.vanmors.invertedmind.util.VarIntUtil;
 
 import java.nio.ByteBuffer;
 
-/**
- * A compressed posting list with skip list for efficient traversal.
- * <p>
- * Stores compressed docIds, term frequencies, and positions as separate byte streams.
- * The skip list enables O(sqrt(n)) advance operations.
- */
 public final class PostingList {
 
     private final int documentFrequency;
@@ -67,9 +61,7 @@ public final class PostingList {
 
     public PForDeltaCodec codec() { return codec; }
 
-    /**
-     * Builds a PostingList from a sorted list of Posting objects.
-     */
+    
     public static PostingList build(java.util.List<Posting> postings, PForDeltaCodec codec, int skipInterval) {
         int df = postings.size();
         if (df == 0) {

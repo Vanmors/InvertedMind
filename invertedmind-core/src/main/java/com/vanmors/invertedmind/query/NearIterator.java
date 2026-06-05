@@ -2,11 +2,6 @@ package com.vanmors.invertedmind.query;
 
 import java.util.Arrays;
 
-/**
- * NEAR iterator: terms must appear within a specified distance in the document.
- * <p>
- * Like ADJ but with a configurable maximum distance between consecutive terms.
- */
 public final class NearIterator implements PostingListIterator {
 
     private final PostingListIterator[] iterators;

@@ -8,19 +8,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
-/**
- * End-to-end benchmark on MS MARCO Passages.
- * <p>
- * Downloads MS MARCO if not cached, indexes passages, writes segment to disk,
- * runs queries, and reports timing.
- * <p>
- * Usage:
- * <pre>
- *   mvn clean package -pl invertedmind-bench -am -DskipTests
- *   java -cp invertedmind-bench/target/benchmarks.jar \
- *        com.vanmors.invertedmind.bench.MsMarcoBenchmark [dataDir] [numPassages]
- * </pre>
- */
 public final class MsMarcoBenchmark {
 
     public static void main(String[] args) throws IOException {

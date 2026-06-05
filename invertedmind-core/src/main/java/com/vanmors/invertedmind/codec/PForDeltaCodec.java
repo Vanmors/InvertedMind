@@ -6,27 +6,6 @@ import com.vanmors.invertedmind.util.VarIntUtil;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
-/**
- * Patched Frame-of-Reference (PForDelta) codec.
- * <p>
- * Operates on blocks of {@link #BLOCK_SIZE} integers. For each block:
- * <ol>
- *     <li>Finds the optimal bit-width that covers ~90% of values</li>
- *     <li>Packs the base values using that bit-width</li>
- *     <li>Stores exceptions (values that don't fit) as patches</li>
- * </ol>
- * <p>
- * Block layout:
- * <pre>
- *   [1 byte: bitsPerValue]
- *   [1 byte: exceptionCount]
- *   [packed base values: bitsPerValue * blockSize / 8 bytes]
- *   [exceptions: for each exception: 1 byte index + VByte overflow value]
- * </pre>
- * <p>
- * Excellent compression ratio for posting lists with mostly small gaps
- * and occasional large ones (common in real-world inverted indexes).
- */
 public final class PForDeltaCodec {
 
     public static final int BLOCK_SIZE = 128;

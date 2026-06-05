@@ -2,12 +2,6 @@ package com.vanmors.invertedmind.core;
 
 import java.util.Arrays;
 
-/**
- * In-memory term dictionary with binary search lookup.
- * <p>
- * Terms are stored sorted. Each term has an associated {@link TermInfo} with
- * document frequency, total term frequency, and posting list location.
- */
 public final class TermDictionary {
 
     private final String[] terms;
@@ -31,9 +25,7 @@ public final class TermDictionary {
         return terms.length;
     }
 
-    /**
-     * Builds a TermDictionary from a sorted list of (term, df, ttf, offset, length) entries.
-     */
+    
     public static Builder builder(int capacity) {
         return new Builder(capacity);
     }

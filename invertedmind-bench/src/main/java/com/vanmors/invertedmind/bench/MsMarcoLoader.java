@@ -13,24 +13,6 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.zip.GZIPInputStream;
 
-/**
- * Loads the MS MARCO Passages dataset for benchmarking.
- * <p>
- * Dataset format: TSV with columns [passageId, passageText].
- * Full collection: ~8.8M passages, ~1GB text.
- * <p>
- * Usage:
- * <pre>
- *   // Load first 100K passages (downloads if needed)
- *   List&lt;String&gt; passages = MsMarcoLoader.loadPassages(Path.of("data"), 100_000);
- *
- *   // Load all passages
- *   List&lt;String&gt; all = MsMarcoLoader.loadPassages(Path.of("data"), -1);
- *
- *   // Load queries
- *   List&lt;String&gt; queries = MsMarcoLoader.loadQueries(Path.of("data"));
- * </pre>
- */
 public final class MsMarcoLoader {
 
     private static final String COLLECTION_URL =
@@ -43,13 +25,7 @@ public final class MsMarcoLoader {
 
     private MsMarcoLoader() {}
 
-    /**
-     * Loads passages from MS MARCO. Downloads and extracts if not cached.
-     *
-     * @param dataDir directory to cache downloaded files
-     * @param limit   max passages to load, or -1 for all
-     * @return list of passage texts
-     */
+    
     public static List<String> loadPassages(Path dataDir, int limit) throws IOException {
         Path tsvFile = dataDir.resolve(COLLECTION_FILE);
         if (!Files.exists(tsvFile)) {
@@ -75,13 +51,7 @@ public final class MsMarcoLoader {
         return passages;
     }
 
-    /**
-     * Streams passages one by one to avoid loading everything into memory.
-     *
-     * @param dataDir  directory with cached files
-     * @param limit    max passages, or -1 for all
-     * @param consumer callback for each passage text
-     */
+    
     public static int streamPassages(Path dataDir, int limit, Consumer<String> consumer) throws IOException {
         Path tsvFile = dataDir.resolve(COLLECTION_FILE);
         if (!Files.exists(tsvFile)) {
@@ -103,12 +73,7 @@ public final class MsMarcoLoader {
         return count;
     }
 
-    /**
-     * Loads dev queries from MS MARCO.
-     *
-     * @param dataDir directory to cache downloaded files
-     * @return list of query strings
-     */
+    
     public static List<String> loadQueries(Path dataDir) throws IOException {
         Path tsvFile = dataDir.resolve(QUERIES_FILE);
         if (!Files.exists(tsvFile)) {
@@ -162,9 +127,7 @@ public final class MsMarcoLoader {
         System.out.println("Extracted to " + outputDir);
     }
 
-    /**
-     * Minimal tar extractor — handles only regular files (enough for MS MARCO archives).
-     */
+    
     private static void extractTar(InputStream in, Path outputDir) throws IOException {
         byte[] header = new byte[512];
         while (true) {
@@ -223,9 +186,7 @@ public final class MsMarcoLoader {
         }
     }
 
-    /**
-     * CLI: downloads and indexes MS MARCO, runs sample queries.
-     */
+    
     public static void main(String[] args) throws IOException {
         Path dataDir = args.length > 0 ? Path.of(args[0]) : Path.of("data/msmarco");
         int limit = args.length > 1 ? Integer.parseInt(args[1]) : 100_000;
