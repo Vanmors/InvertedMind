@@ -1,7 +1,7 @@
-package com.vanmors.invertedmind.demo;
+package com.vanmors.invertedindex.demo;
 
-import com.vanmors.invertedmind.core.*;
-import com.vanmors.invertedmind.index.IndexBuilder;
+import com.vanmors.invertedindex.core.*;
+import com.vanmors.invertedindex.index.IndexBuilder;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -19,13 +19,13 @@ public final class DemoApp {
         Path dataDir = Path.of(msmarcoDir);
         int numDocs  = Integer.parseInt(System.getProperty("msmarco.limit", "50000"));
 
-        System.out.println("=== InvertedMind Demo ===");
+        System.out.println("=== InvertedIndex Demo ===");
         System.out.println();
 
         List<String> corpus = loadPassages(dataDir, numDocs);
 
         // Build index
-        Path tempDir = Files.createTempDirectory("invertedmind-demo");
+        Path tempDir = Files.createTempDirectory("invertedindex-demo");
         IndexConfig config = IndexConfig.builder(tempDir).build();
         IndexBuilder builder = new IndexBuilder(config);
 
@@ -62,7 +62,7 @@ public final class DemoApp {
                 QueryResult result = index.search(line, 10);
                 long elapsedUs = (System.nanoTime() - startNs) / 1_000;
 
-                System.out.printf("%,d hits  (%d µs)%n", result.totalHits(), elapsedUs);
+                System.out.printf("%,d hits  (%d us)%n", result.totalHits(), elapsedUs);
                 for (ScoredDoc doc : result.results()) {
                     String text = corpus.get(doc.docId());
                     String snippet = text.length() > 120 ? text.substring(0, 117) + "..." : text;
@@ -75,14 +75,12 @@ public final class DemoApp {
             }
         }
 
-        // Cleanup
         try (var ds = Files.list(tempDir)) {
             ds.forEach(p -> { try { Files.deleteIfExists(p); } catch (IOException ignored) {} });
         }
         Files.deleteIfExists(tempDir);
     }
 
-    // ── Helpers ───────────────────────────────────────────────────────────────
 
     private static List<String> loadPassages(Path dataDir, int limit) throws IOException {
         Path tsvFile = dataDir.resolve("collection.tsv");
@@ -90,8 +88,9 @@ public final class DemoApp {
             throw new IOException(
                     "collection.tsv not found in: " + dataDir.toAbsolutePath() + "\n" +
                     "Run the MS MARCO benchmark first to download the dataset:\n" +
-                    "  java -cp invertedmind-bench/target/benchmarks.jar " +
-                    "com.vanmors.invertedmind.bench.MsMarcoBenchmark " + dataDir + " 1000");
+                    "  mvn -pl invertedindex-core exec:exec " +
+                    "-Dexec.args=\"-classpath %classpath " +
+                    "com.vanmors.invertedindex.bench.MsMarcoBenchmark " + dataDir + " 1000\"");
         }
 
         System.out.printf("Loading %,d passages from %s...%n", limit, tsvFile.toAbsolutePath());
