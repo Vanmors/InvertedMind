@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.vanmors</groupId>
+        <artifactId>invertedindex</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>invertedindex-core</artifactId>
+    <name>InvertedIndex Core</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.antlr</groupId>
+            <artifactId>antlr4-runtime</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- JMH benchmarks (test scope: not shipped with the library jar) -->
+        <dependency>
+            <groupId>org.openjdk.jmh</groupId>
+            <artifactId>jmh-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.openjdk.jmh</groupId>
+            <artifactId>jmh-generator-annprocess</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.antlr</groupId>
+                <artifactId>antlr4-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>antlr4</goal>
+                        </goals>
+                        <configuration>
+                            <visitor>true</visitor>
+                            <listener>false</listener>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Run JMH / MS MARCO benchmarks from the test classpath.
+                 exec:exec launches a separate JVM with the real classpath so that
+                 JMH's per-benchmark JVM forking works correctly. The %classpath
+                 token is expanded by the plugin (honouring classpathScope=test).
+
+                 mvn -pl invertedindex-core -am test-compile
+                 mvn -pl invertedindex-core exec:exec \
+                     -Dexec.args="-classpath %classpath org.openjdk.jmh.Main"
+                 mvn -pl invertedindex-core exec:exec \
+                     -Dexec.args="-classpath %classpath org.openjdk.jmh.Main QueryBenchmark"
+                 mvn -pl invertedindex-core exec:exec \
+                     -Dexec.args="-classpath %classpath com.vanmors.invertedindex.bench.MsMarcoBenchmark data/msmarco 100000" -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                    <executable>java</executable>
+                    <classpathScope>test</classpathScope>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
